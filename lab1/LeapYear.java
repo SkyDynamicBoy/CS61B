@@ -3,6 +3,16 @@
  */
 public class LeapYear {
 
+
+    /** isLeapYear() return a boolean value, 
+     * if @param year divided by 400 or
+     * divided by 4 and not divided by 100 
+     */
+    public static boolean isLeapYear(int year) {
+        return (year % 400 == 0 || year % 4 == 0 && year % 100 != 0);
+    }
+
+    
     /** Calls isLeapYear to print correct statement.
      *  @param  year to be analyzed
      */
@@ -13,6 +23,7 @@ public class LeapYear {
             System.out.printf("%d is not a leap year.\n", year);
         }
     }
+
 
     /** Must be provided an integer as a command line argument ARGS. */
     public static void main(String[] args) {
@@ -29,5 +40,7 @@ public class LeapYear {
             }
         }
     }
+
+
 }
 
