@@ -1,10 +1,10 @@
 public class Planet {
-    double xxPos;
-    double yyPos;
-    double xxVel;
-    double yyVel;
-    double mass;
-    String imgFileName;
+    public double xxPos;
+    public double yyPos;
+    public double xxVel;
+    public double yyVel;
+    public double mass;
+    public String imgFileName;
 
     /**Constructor1. 
      * Inicialize the instance variables 
@@ -40,7 +40,7 @@ public class Planet {
     }
 
 
-    public static double GravityConstant = 6.67e-11;
+    private static double GravityConstant = 6.67e-11;
 
 
     /** Return the force exerted on this planet by @param Exerte */
