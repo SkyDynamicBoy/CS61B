@@ -97,7 +97,7 @@ public class ArrayDeque<T> {
         nextFirst = circularPlus(nextFirst);
         size -= 1;
         T result = arr[nextFirst];
-        if (size == capacity / 2) {
+        if (size == capacity / 2 && capacity >=16) {
             shrink();
         }
         return result;
@@ -111,7 +111,7 @@ public class ArrayDeque<T> {
         nextLast = circularMinus(nextLast);
         size -= 1;
         T result = arr[nextLast];
-        if (size == capacity / 2) {
+        if (size == capacity / 2 && capacity >=16) {
             shrink();
         }
         return result;
@@ -138,11 +138,15 @@ public class ArrayDeque<T> {
     }
 
     public T get(int index) {
+        if (isEmpty()) {
+            System.out.println("no elements!");
+            return null;
+        }
         if (index >= size || index < 0) {
             System.out.println("index ot of range");
             return null;
         }
-        int realIndex = (nextFirst + index + 1) % capacity ;
+        int realIndex = (nextFirst + index + 1) % capacity;
         return arr[realIndex];
     }
 
