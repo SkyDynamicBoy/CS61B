@@ -142,7 +142,7 @@ public class ArrayDeque<T> {
             System.out.println("index ot of range");
             return null;
         }
-        int realIndex = (nextFirst + index) % (capacity - 1) ;
+        int realIndex = (nextFirst + index + 1) % capacity ;
         return arr[realIndex];
     }
 
