@@ -76,7 +76,7 @@ public class LinkedListDeque<T> {
             System.out.println("no elements!");
             return null;
         }
-        InNode tmp = sentinel.next;
+        InNode tmp = sentinel.before;
         sentinel.next = sentinel.next.next;
         sentinel.before.next = sentinel;
         size -= 1;
@@ -85,7 +85,7 @@ public class LinkedListDeque<T> {
 
     // get the item with index
     public T get(int index) {
-        if (index >= size) {
+        if (index >= size || index < 0) {
             System.out.println("index ot of range");
             return null;
         }
@@ -98,7 +98,7 @@ public class LinkedListDeque<T> {
     }
 
     public T getRecursive(int index) {
-        if (index >= size) {
+        if (index >= size || index < 0) {
             System.out.println("index ot of range");
             return null;
         }

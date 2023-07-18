@@ -138,19 +138,12 @@ public class ArrayDeque<T> {
     }
 
     public T get(int index) {
-        int realIndex = (nextFirst + index) % (capacity - 1) ;
-        if (nextFirst <= nextLast) {
-            if (index <= nextFirst || index >= nextLast) {
-                System.out.println("out of range");
-                return null;
-            }
-        } else if (nextFirst > nextLast) {
-            if (index <= nextFirst && index >= nextLast) {
-                System.out.println("out of range");
-                return null;
-            }
+        if (index >= size || index < 0) {
+            System.out.println("index ot of range");
+            return null;
         }
-        return arr[index];
+        int realIndex = (nextFirst + index) % (capacity - 1) ;
+        return arr[realIndex];
     }
 
 }
