@@ -4,9 +4,9 @@ public class LinkedListDeque<T> {
 
     //List Node
     private class InNode {
-        public T item;
-        public InNode next;
-        public InNode before;
+        private T item;
+        private InNode next;
+        private InNode before;
 
         public InNode(T item, InNode before, InNode next) {
             this.item = item;
@@ -59,23 +59,33 @@ public class LinkedListDeque<T> {
 
     // remove an element at first
     public T removeFirst() {
+        if (isEmpty()) {
+            System.out.println("no elements!");
+            return null;
+        }
         InNode tmp = sentinel.next;
         sentinel.next = sentinel.next.next;
+        sentinel.next.before = sentinel;
         size -= 1;
         return tmp.item;
     }
 
     // remove an element at last
     public T removeLast() {
+        if (isEmpty()) {
+            System.out.println("no elements!");
+            return null;
+        }
         InNode tmp = sentinel.next;
         sentinel.next = sentinel.next.next;
+        sentinel.before.next = sentinel;
         size -= 1;
         return tmp.item;
     }
 
     // get the item with index
     public T get(int index) {
-        if(index >= size) {
+        if (index >= size) {
             System.out.println("index ot of range");
             return null;
         }
@@ -88,7 +98,7 @@ public class LinkedListDeque<T> {
     }
 
     public T getRecursive(int index) {
-        if(index >= size) {
+        if (index >= size) {
             System.out.println("index ot of range");
             return null;
         }
@@ -101,5 +111,6 @@ public class LinkedListDeque<T> {
         }
         return getRecursiveHelper(index - 1, ptr.next);
     }
-
 }
+
+

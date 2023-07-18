@@ -5,13 +5,18 @@ public class ArrayDeque<T> {
     private int nextLast;
     private T[] arr;
 
+
+    private static final int INIT_CAPACITY = 8;
+    private static final int INIT_NEXT_FIRST = 3;
+    private static final int INIT_NEXT_LAST = 4;
+
     // Constructor
     public ArrayDeque() {
-        arr = (T[])new Object[8];
+        arr = (T[]) new Object[INIT_CAPACITY];
+        capacity = INIT_CAPACITY;
+        nextFirst = INIT_NEXT_FIRST;
+        nextLast = INIT_NEXT_LAST;
         size = 0;
-        capacity = 8;
-        nextFirst = 3;
-        nextLast = 4;
     }
 
     public void addFirst(T item) {
@@ -35,16 +40,15 @@ public class ArrayDeque<T> {
     // Helper to double the capacity
     private void addCapacity() {
         capacity = capacity * 2;
-        T[] newarr = (T[])new Object[capacity];
-        if(nextLast == 0) {
-            System.arraycopy(arr,0,newarr,0,size);
+        T[] newarr = (T[]) new Object[capacity];
+        if (nextLast == 0) {
+            System.arraycopy(arr, 0, newarr, 0, size);
             nextLast = nextLast + size;
-        }
-        else {
-            for(int i = 0; i < nextLast; i++) {
+        } else {
+            for (int i = 0; i < nextLast; i++) {
                 newarr[i] = arr[i];
             }
-            for(int i = size - 1; i > nextFirst; i--) {
+            for (int i = size - 1; i > nextFirst; i--) {
                 newarr[i + size] = arr[i];
             }
         }
@@ -80,32 +84,68 @@ public class ArrayDeque<T> {
 
     public void printDeque() {
         int firstindex = circularPlus(nextFirst);
-        for(int i = firstindex; i != nextLast; i = circularPlus(i)) {
+        for (int i = firstindex; i != nextLast; i = circularPlus(i)) {
             System.out.print(arr[i] + " ");
         }
     }
 
     public T removeFirst() {
+        if (isEmpty()) {
+            System.out.println("no elements!");
+            return null;
+        }
         nextFirst = circularPlus(nextFirst);
         size -= 1;
-        return arr[nextFirst];
+        T result = arr[nextFirst];
+        if (size == capacity / 2) {
+            shrink();
+        }
+        return result;
     }
 
     public T removeLast() {
+        if (isEmpty()) {
+            System.out.println("no elements!");
+            return null;
+        }
         nextLast = circularMinus(nextLast);
         size -= 1;
-        return arr[nextLast];
+        T result = arr[nextLast];
+        if (size == capacity / 2) {
+            shrink();
+        }
+        return result;
+    }
+
+    private void shrink() {
+        int oldcapacity = capacity;
+        capacity = size;
+        T[] newarr = (T[]) new Object[capacity];
+        if (nextLast > nextFirst) {
+            System.arraycopy(arr, nextFirst + 1, newarr, 0, size);
+        } else {
+            int j = 0;
+            for (int i = nextFirst + 1; i < oldcapacity; i++, j++) {
+                newarr[j] = arr[i];
+            }
+            for (int i = 0; i < nextLast; i++, j++) {
+                newarr[j] = arr[i];
+            }
+        }
+        nextLast = 0;
+        nextFirst = size - 1;
+        arr = newarr;
     }
 
     public T get(int index) {
-        if(nextFirst <= nextLast) {
+        int realIndex = (nextFirst + index) % (capacity - 1) ;
+        if (nextFirst <= nextLast) {
             if (index <= nextFirst || index >= nextLast) {
                 System.out.println("out of range");
                 return null;
             }
-        }
-        else if(nextFirst > nextLast) {
-            if(index <= nextFirst && index >= nextLast) {
+        } else if (nextFirst > nextLast) {
+            if (index <= nextFirst && index >= nextLast) {
                 System.out.println("out of range");
                 return null;
             }
@@ -114,3 +154,4 @@ public class ArrayDeque<T> {
     }
 
 }
+
