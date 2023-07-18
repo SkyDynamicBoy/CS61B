@@ -1,0 +1,116 @@
+public class ArrayDeque<T> {
+    private int size;
+    private int capacity;
+    private int nextFirst;
+    private int nextLast;
+    private T[] arr;
+
+    // Constructor
+    public ArrayDeque() {
+        arr = (T[])new Object[8];
+        size = 0;
+        capacity = 8;
+        nextFirst = 3;
+        nextLast = 4;
+    }
+
+    public void addFirst(T item) {
+        if (size == capacity) {
+            addCapacity();
+        }
+        arr[nextFirst] = item;
+        nextFirst = circularMinus(nextFirst);
+        size += 1;
+    }
+
+    public void addLast(T item) {
+        if (size == capacity) {
+            addCapacity();
+        }
+        arr[nextLast] = item;
+        nextLast = circularPlus(nextLast);
+        size += 1;
+    }
+
+    // Helper to double the capacity
+    private void addCapacity() {
+        capacity = capacity * 2;
+        T[] newarr = (T[])new Object[capacity];
+        if(nextLast == 0) {
+            System.arraycopy(arr,0,newarr,0,size);
+            nextLast = nextLast + size;
+        }
+        else {
+            for(int i = 0; i < nextLast; i++) {
+                newarr[i] = arr[i];
+            }
+            for(int i = size - 1; i > nextFirst; i--) {
+                newarr[i + size] = arr[i];
+            }
+        }
+        nextFirst = nextFirst + size;
+        arr = newarr;
+    }
+
+    //Helper to minus a index
+    private int circularMinus(int num) {
+        num = num - 1;
+        if (num == -1) {
+            num = capacity - 1;
+        }
+        return num;
+    }
+
+    //Helper to plus a index
+    private int circularPlus(int num) {
+        num = num + 1;
+        if (num == capacity) {
+            num = 0;
+        }
+        return num;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public void printDeque() {
+        int firstindex = circularPlus(nextFirst);
+        for(int i = firstindex; i != nextLast; i = circularPlus(i)) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+
+    public T removeFirst() {
+        nextFirst = circularPlus(nextFirst);
+        size -= 1;
+        return arr[nextFirst];
+    }
+
+    public T removeLast() {
+        nextLast = circularMinus(nextLast);
+        size -= 1;
+        return arr[nextLast];
+    }
+
+    public T get(int index) {
+        if(nextFirst <= nextLast) {
+            if (index <= nextFirst || index >= nextLast) {
+                System.out.println("out of range");
+                return null;
+            }
+        }
+        else if(nextFirst > nextLast) {
+            if(index <= nextFirst && index >= nextLast) {
+                System.out.println("out of range");
+                return null;
+            }
+        }
+        return arr[index];
+    }
+
+}
