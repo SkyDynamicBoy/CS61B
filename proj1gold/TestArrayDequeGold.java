@@ -9,10 +9,10 @@ public class TestArrayDequeGold {
         ArrayDequeSolution<Integer> arrS = new ArrayDequeSolution<>();
         StudentArrayDeque<Integer> a = new StudentArrayDeque<>();
 
-        String m = "";
+        String m;
         m = "isEmpty()\n";
         assertEquals(m,true,a.isEmpty());
-        int size = a.size();
+
         m += "size()\n";
         assertEquals(m,0,a.size());
 
@@ -31,39 +31,50 @@ public class TestArrayDequeGold {
             i++;
         }
 
-        size = a.size();
         m += "size()\n";
         assertEquals(m, 10, a.size());
+
         Integer actual = a.removeFirst();
         m += "removeFirst()\n";
         assertEquals(m, arrS.removeFirst(), actual);
+
         actual = a.removeFirst();
-        m += "removeFirst()\n";
+        m += "removeLast()\n";
         assertEquals(m, arrS.removeLast(), actual);
+
         actual = a.removeFirst();
-        m += "removeFirst()\n";
+        m += "removeLast()\n";
         assertEquals(m, arrS.removeLast(), actual);
+
         actual = a.removeFirst();
         m += "removeFirst()\n";
         assertEquals(m, arrS.removeFirst(), actual);
+
         actual = a.removeFirst();
-        m += "removeFirst()\n";
+        m += "removeLast()\n";
         assertEquals(m, arrS.removeLast(), actual);
+
         actual = a.removeFirst();
-        m += "removeFirst()\n";
+        m += "removeLast()\n";
         assertEquals(m, arrS.removeLast(), actual);
+
         actual = a.removeFirst();
         m += "removeFirst()\n";
         assertEquals(m, arrS.removeFirst(), actual);
+
         actual = a.removeFirst();
-        m += "removeFirst()\n";
+        m += "removeLast()\n";
         assertEquals(m, arrS.removeLast(), actual);
-        assertEquals(2,a.size());
+
+        m += "size()\n";
+        assertEquals(m,2,a.size());
+
         actual = a.removeFirst();
         m += "removeFirst()\n";
         assertEquals(m, arrS.removeFirst(), actual);
+
         actual = a.removeFirst();
-        m += "removeFirst()\n";
+        m += "removeLast()\n";
         assertEquals(m, arrS.removeLast(), actual);
     }
 
