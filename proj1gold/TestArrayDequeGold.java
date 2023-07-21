@@ -10,8 +10,11 @@ public class TestArrayDequeGold {
         StudentArrayDeque<Integer> a = new StudentArrayDeque<>();
 
         String m = "";
-        assertEquals(arrS.isEmpty(),a.isEmpty());
-        assertEquals(arrS.size(),a.size());
+        m = String.format("isEmpty():False\n");
+        assertEquals(m,true,a.isEmpty());
+        int size = a.size();
+        m += String.format("size():%d\n",size);
+        assertEquals(m,0,a.size());
 
         int i = 0;
         while (i < 10) {
@@ -28,38 +31,39 @@ public class TestArrayDequeGold {
             i++;
         }
 
-        assertEquals(arrS.size(),a.size());
-        assertEquals(10,a.size());
+        size = a.size();
+        m += String.format("size():%d\n",size);
+        assertEquals(m, 10, a.size());
         Integer actual = a.removeFirst();
-        m += String.format("a.removeFirst():%d\n",actual);
+        m += String.format("removeFirst():%d\n",actual);
         assertEquals(m, arrS.removeFirst(), actual);
         actual = a.removeFirst();
-        m += String.format("a.removeFirst():%d\n",actual);
+        m += String.format("removeFirst():%d\n",actual);
         assertEquals(m, arrS.removeLast(), actual);
         actual = a.removeFirst();
-        m += String.format("a.removeFirst():%d\n",actual);
+        m += String.format("removeFirst():%d\n",actual);
         assertEquals(m, arrS.removeLast(), actual);
         actual = a.removeFirst();
-        m += String.format("a.removeFirst():%d\n",actual);
+        m += String.format("removeFirst():%d\n",actual);
         assertEquals(m, arrS.removeFirst(), actual);
         actual = a.removeFirst();
-        m += String.format("a.removeFirst():%d\n",actual);
+        m += String.format("removeFirst():%d\n",actual);
         assertEquals(m, arrS.removeLast(), actual);
         actual = a.removeFirst();
-        m += String.format("a.removeFirst():%d\n",actual);
+        m += String.format("removeFirst():%d\n",actual);
         assertEquals(m, arrS.removeLast(), actual);
         actual = a.removeFirst();
-        m += String.format("a.removeFirst():%d\n",actual);
+        m += String.format("removeFirst():%d\n",actual);
         assertEquals(m, arrS.removeFirst(), actual);
         actual = a.removeFirst();
-        m += String.format("a.removeFirst():%d\n",actual);
+        m += String.format("removeFirst():%d\n",actual);
         assertEquals(m, arrS.removeLast(), actual);
         assertEquals(2,a.size());
         actual = a.removeFirst();
-        m += String.format("a.removeFirst():%d\n",actual);
+        m += String.format("removeFirst():%d\n",actual);
         assertEquals(m, arrS.removeFirst(), actual);
         actual = a.removeFirst();
-        m += String.format("a.removeFirst():%d\n",actual);
+        m += String.format("removeFirst():%d\n",actual);
         assertEquals(m, arrS.removeLast(), actual);
     }
 
