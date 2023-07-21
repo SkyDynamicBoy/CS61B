@@ -9,75 +9,54 @@ public class TestArrayDequeGold {
         ArrayDequeSolution<Integer> arrS = new ArrayDequeSolution<>();
         StudentArrayDeque<Integer> a = new StudentArrayDeque<>();
 
-        String m;
-        m = "isEmpty()\n";
-        assertEquals(m,true,a.isEmpty());
+        String m = "";
 
-        m += "size()\n";
-        assertEquals(m,0,a.size());
-
-        int i = 0;
-        while (i < 10) {
-            Integer num1 = StdRandom.uniform(10);
-            if(i % 2 == 0) {
-                arrS.addLast(num1);
-                a.addLast(num1);
-                m += String.format("a.addLast(%d)\n",num1);
-            } else {
-                arrS.addFirst(num1);
-                a.addFirst(num1);
-                m += String.format("a.addFirst(%d)\n",num1);
+        for (int i = 0; i < 1000; i++) {
+            if (arrS.isEmpty()) {
+                Integer addnum = StdRandom.uniform(100);
+                arrS.addFirst(addnum);
+                a.addFirst(addnum);
+                m += "addFirst(" + addnum + ")\n";
             }
-            i++;
+            else {
+                Integer nextOp = StdRandom.uniform(4);
+                Integer expected = -1;
+                Integer actual = -1;
+                switch (nextOp) {
+                    case 0: {
+                        Integer addnum = StdRandom.uniform(100);
+                        arrS.addFirst(addnum);
+                        a.addFirst(addnum);
+                        m += "addFirst(" + addnum + ")\n";
+                        break;
+                    }
+                    case 1: {
+                        Integer addnum = StdRandom.uniform(100);
+                        arrS.addLast(addnum);
+                        a.addLast(addnum);
+                        m += "addLast(" + addnum + ")\n";
+                        break;
+                    }
+                    case 2: {
+                        expected = arrS.removeFirst();
+                        actual = a.removeFirst();
+                        m += "removeFirst()\n";
+                        break;
+                    }
+                    case 3: {
+                        expected = arrS.removeLast();
+                        actual = a.removeLast();
+                        m += "removeLast()\n";
+                        break;
+                    }
+                    default:
+                }
+                assertEquals(m, expected, actual);
+            }
         }
 
-        m += "size()\n";
-        assertEquals(m, 10, a.size());
 
-        Integer actual = a.removeFirst();
-        m += "removeFirst()\n";
-        assertEquals(m, arrS.removeFirst(), actual);
-
-        actual = a.removeFirst();
-        m += "removeLast()\n";
-        assertEquals(m, arrS.removeLast(), actual);
-
-        actual = a.removeFirst();
-        m += "removeLast()\n";
-        assertEquals(m, arrS.removeLast(), actual);
-
-        actual = a.removeFirst();
-        m += "removeFirst()\n";
-        assertEquals(m, arrS.removeFirst(), actual);
-
-        actual = a.removeFirst();
-        m += "removeLast()\n";
-        assertEquals(m, arrS.removeLast(), actual);
-
-        actual = a.removeFirst();
-        m += "removeLast()\n";
-        assertEquals(m, arrS.removeLast(), actual);
-
-        actual = a.removeFirst();
-        m += "removeFirst()\n";
-        assertEquals(m, arrS.removeFirst(), actual);
-
-        actual = a.removeFirst();
-        m += "removeLast()\n";
-        assertEquals(m, arrS.removeLast(), actual);
-
-        m += "size()\n";
-        assertEquals(m,2,a.size());
-
-        actual = a.removeFirst();
-        m += "removeFirst()\n";
-        assertEquals(m, arrS.removeFirst(), actual);
-
-        actual = a.removeFirst();
-        m += "removeLast()\n";
-        assertEquals(m, arrS.removeLast(), actual);
     }
-
 
 
 }
