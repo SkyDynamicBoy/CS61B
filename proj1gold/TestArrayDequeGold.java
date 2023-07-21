@@ -10,10 +10,10 @@ public class TestArrayDequeGold {
         StudentArrayDeque<Integer> a = new StudentArrayDeque<>();
 
         String m = "";
-        m = String.format("isEmpty():False\n");
+        m = "isEmpty()\n";
         assertEquals(m,true,a.isEmpty());
         int size = a.size();
-        m += String.format("size():%d\n",size);
+        m += "size()\n";
         assertEquals(m,0,a.size());
 
         int i = 0;
@@ -32,38 +32,38 @@ public class TestArrayDequeGold {
         }
 
         size = a.size();
-        m += String.format("size():%d\n",size);
+        m += "size()\n";
         assertEquals(m, 10, a.size());
         Integer actual = a.removeFirst();
-        m += String.format("removeFirst():%d\n",actual);
+        m += "removeFirst()\n";
         assertEquals(m, arrS.removeFirst(), actual);
         actual = a.removeFirst();
-        m += String.format("removeFirst():%d\n",actual);
+        m += "removeFirst()\n";
         assertEquals(m, arrS.removeLast(), actual);
         actual = a.removeFirst();
-        m += String.format("removeFirst():%d\n",actual);
+        m += "removeFirst()\n";
         assertEquals(m, arrS.removeLast(), actual);
         actual = a.removeFirst();
-        m += String.format("removeFirst():%d\n",actual);
+        m += "removeFirst()\n";
         assertEquals(m, arrS.removeFirst(), actual);
         actual = a.removeFirst();
-        m += String.format("removeFirst():%d\n",actual);
+        m += "removeFirst()\n";
         assertEquals(m, arrS.removeLast(), actual);
         actual = a.removeFirst();
-        m += String.format("removeFirst():%d\n",actual);
+        m += "removeFirst()\n";
         assertEquals(m, arrS.removeLast(), actual);
         actual = a.removeFirst();
-        m += String.format("removeFirst():%d\n",actual);
+        m += "removeFirst()\n";
         assertEquals(m, arrS.removeFirst(), actual);
         actual = a.removeFirst();
-        m += String.format("removeFirst():%d\n",actual);
+        m += "removeFirst()\n";
         assertEquals(m, arrS.removeLast(), actual);
         assertEquals(2,a.size());
         actual = a.removeFirst();
-        m += String.format("removeFirst():%d\n",actual);
+        m += "removeFirst()\n";
         assertEquals(m, arrS.removeFirst(), actual);
         actual = a.removeFirst();
-        m += String.format("removeFirst():%d\n",actual);
+        m += "removeFirst()\n";
         assertEquals(m, arrS.removeLast(), actual);
     }
 
