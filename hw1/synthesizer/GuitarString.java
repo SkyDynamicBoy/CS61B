@@ -20,6 +20,9 @@ public class GuitarString {
         //       Your buffer should be initially filled with zeros.
         int capacity = (int) Math.round(SR / frequency);
         buffer = new ArrayRingBuffer(capacity);
+        while (!buffer.isFull()) {
+            buffer.enqueue(0.0);
+        }
     }
 
 
@@ -30,6 +33,9 @@ public class GuitarString {
         //       double r = Math.random() - 0.5;
         //
         //       Make sure that your random numbers are different from each other.
+        while (!buffer.isEmpty()) {
+            buffer.dequeue();
+        }
         Double r;
         int capacity = buffer.capacity();
         Double[] temp = new Double[capacity];
@@ -39,12 +45,12 @@ public class GuitarString {
             do {
                 noSame = true;
                 for (int j = 0; j < i; j++) {
-                    if(r == temp[j]) {
+                    if (r == temp[j]) {
                         r = Math.random() - 0.5;
                         noSame = false;
                     }
                 }
-            } while(!noSame);
+            } while (!noSame);
             temp[i] = r;
         }
         for (Double i : temp) {
