@@ -6,21 +6,35 @@ import static org.junit.Assert.*;
 
 public class Percolation {
     private int size;
+    private int openNums;
     private WeightedQuickUnionUF sites;
-    private boolean[] isopen;
-    private boolean[] isfull;
-    private int openedNumber;
+    private boolean[][] isopen;
+
+    private int[] openBottomSitesNumber;
+    private int openBottomNums;
+    private boolean isPercolation;
+    private int totalsites;
 
 
+    private int xyTo1D(int row, int col) {
+        return row * size + col;
+    }
     public Percolation(int N) {
         if (N <= 0) {
             throw new IllegalArgumentException();
         }
         this.size = N;
-        this.sites = new WeightedQuickUnionUF(N * N);
-        this.isopen = new boolean[N * N];
-        this.isfull = new boolean[N * N];
-        this.openedNumber = 0;
+        this.totalsites = N *N;
+        this.sites = new WeightedQuickUnionUF(totalsites + 1);
+        this.isopen = new boolean[N][N];
+        this.openBottomSitesNumber = new int[N];
+        this.openBottomNums = 0;
+        this.openNums = 0;
+        this.isPercolation = false;
+
+        for(int i = 0; i < N; i++) {
+            sites.union(i, N * N);
+        }
     }                // create N-by-N grid, with all sites initially blocked
 
 
@@ -28,58 +42,45 @@ public class Percolation {
         if (col < 0 || col >= size || row < 0 || row >= size) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        int index = row * size + col;
-        if (isopen[index]) {
+        if (isopen[row][col]) {
             return;
         }
-        isopen[index] = true;
-        openedNumber++;
-        makeConnect(index, row, col);
-        if (row == 0) {
-            isfull[col] = true;
+        isopen[row][col] = true;
+        openNums++;
+        makeUnionWithNeibor(row, col);
+
+        int lastindex = size - 1;
+        if (row == lastindex) {
+            openBottomSitesNumber[openBottomNums] = col;
+            openBottomNums++;
+        }
+        if (!isPercolation) {
+            for (int i = 0; i < openBottomNums; i++) {
+                if (sites.connected(xyTo1D(lastindex, openBottomSitesNumber[i]), totalsites)) {
+                    isPercolation = true;
+                    break;
+                }
+            }
         }
     }       // open the site (row, col) if it is not open already
 
-    private void makeConnect(int index, int row, int col) {
+    private void makeUnionWithNeibor(int row, int col) {
+        int index = xyTo1D(row, col);
         int lastrow = row - 1;
-        if (lastrow >= 0) {
-            int slideup = lastrow * size + col;
-            if (isopen[slideup]) {
-                sites.union(slideup, index);
-                if (isfull[slideup]) {
-                    isfull[index] = true;
-                }
-            }
+        if (lastrow >= 0 && isopen[lastrow][col]) {
+            sites.union(xyTo1D(lastrow, col), index);
         }
         int nextrow = row + 1;
-        if (nextrow < size) {
-            int slidedown = nextrow * size + col;
-            if (isopen[slidedown]) {
-                sites.union(slidedown, index);
-                if (isfull[slidedown]) {
-                    isfull[index] = true;
-                }
-            }
+        if (nextrow < size && isopen[nextrow][col]) {
+            sites.union(xyTo1D(nextrow, col), index);
         }
         int lastcol = col - 1;
-        if (lastcol >= 0) {
-            int slideleft = row * size + lastcol;
-            if (isopen[slideleft]) {
-                sites.union(slideleft, index);
-                if (isfull[slideleft]) {
-                    isfull[index] = true;
-                }
-            }
+        if (lastcol >= 0 && isopen[row][lastcol]) {
+            sites.union(xyTo1D(row, lastcol), index);
         }
         int nextcol = col + 1;
-        if (nextcol < size) {
-            int slideright = row * size + nextcol;
-            if (isopen[slideright]) {
-                sites.union(slideright, index);
-                if (isfull[slideright]) {
-                    isfull[index] = true;
-                }
-            }
+        if (nextcol < size && isopen[row][nextcol]) {
+            sites.union(xyTo1D(row, nextcol), index);
         }
     }
 
@@ -88,8 +89,7 @@ public class Percolation {
         if (col < 0 || col >= size || row < 0 || row >= size) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        int index = row * size + col;
-        return isopen[index];
+        return isopen[row][col];
     }  // is the site (row, col) open?
 
 
@@ -97,37 +97,21 @@ public class Percolation {
         if (col < 0 || col >= size || row < 0 || row >= size) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        int index = row * size + col;
-        if (isfull[index]) {
-            return true;
-        } else {
-            for (int i = 0; i < size; i++) {
-                if (isopen[i] && sites.connected(i, index)) {
-                    isfull[index] = true;
-                }
-            }
-        }
-        return isfull[index];
+        return sites.connected(xyTo1D(row, col), totalsites) && isOpen(row, col);
     } // is the site (row, col) full?
 
 
     public int numberOfOpenSites() {
-        return openedNumber;
+        return openNums;
     }           // number of open sites
 
 
     public boolean percolates() {
-        int endRow = size - 1;
-        for (int i = 0; i < size; i++) {
-            if (isFull(endRow, i)) {
-                return true;
-            }
-        }
-        return false;
+        return isPercolation;
     }             // does the system percolate?
 
     @Test
-    public static void main(String[] args) {
+    private static void main(String[] args) {
         Percolation mySys = new Percolation(5);
         assertEquals(0, mySys.numberOfOpenSites());
 

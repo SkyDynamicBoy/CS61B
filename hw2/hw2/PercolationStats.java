@@ -51,10 +51,10 @@ public class PercolationStats {
         return confidenceHigh;
     }                                // high endpoint of 95% confidence interval
 
-    public static void main(String[] args) {
+    private static void main(String[] args) {
         Stopwatch timetest = new Stopwatch();
         PercolationFactory pf = new PercolationFactory();
-        PercolationStats myStats = new PercolationStats(100, 100, pf);
+        PercolationStats myStats = new PercolationStats(1000, 1000, pf);
         System.out.println("runtime: " + timetest.elapsedTime());
         System.out.println("mean: " + myStats.mean());
         System.out.println("stddev: " + myStats.stddev());
