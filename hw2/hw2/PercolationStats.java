@@ -54,7 +54,7 @@ public class PercolationStats {
     public static void main(String[] args) {
         Stopwatch timetest = new Stopwatch();
         PercolationFactory pf = new PercolationFactory();
-        PercolationStats myStats = new PercolationStats(100, 1000, pf);
+        PercolationStats myStats = new PercolationStats(100, 100, pf);
         System.out.println("runtime: " + timetest.elapsedTime());
         System.out.println("mean: " + myStats.mean());
         System.out.println("stddev: " + myStats.stddev());

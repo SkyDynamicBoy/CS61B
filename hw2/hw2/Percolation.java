@@ -7,7 +7,8 @@ import static org.junit.Assert.*;
 public class Percolation {
     private int size;
     private WeightedQuickUnionUF sites;
-    private boolean[] states;
+    private boolean[] isopen;
+    private boolean[] isfull;
     private int openedNumber;
 
 
@@ -17,7 +18,8 @@ public class Percolation {
         }
         this.size = N;
         this.sites = new WeightedQuickUnionUF(N * N);
-        this.states = new boolean[N * N];
+        this.isopen = new boolean[N * N];
+        this.isfull = new boolean[N * N];
         this.openedNumber = 0;
     }                // create N-by-N grid, with all sites initially blocked
 
@@ -27,41 +29,56 @@ public class Percolation {
             throw new java.lang.IndexOutOfBoundsException();
         }
         int index = row * size + col;
-        if (states[index]) {
+        if (isopen[index]) {
             return;
         }
-        states[index] = true;
+        isopen[index] = true;
         openedNumber++;
-        connectOpen(index, row, col);
+        makeConnect(index, row, col);
+        if (row == 0) {
+            isfull[col] = true;
+        }
     }       // open the site (row, col) if it is not open already
 
-    private void connectOpen(int index, int row, int col) {
+    private void makeConnect(int index, int row, int col) {
         int lastrow = row - 1;
         if (lastrow >= 0) {
             int slideup = lastrow * size + col;
-            if (states[slideup]) {
+            if (isopen[slideup]) {
                 sites.union(slideup, index);
+                if (isfull[slideup]) {
+                    isfull[index] = true;
+                }
             }
         }
         int nextrow = row + 1;
         if (nextrow < size) {
             int slidedown = nextrow * size + col;
-            if (states[slidedown]) {
+            if (isopen[slidedown]) {
                 sites.union(slidedown, index);
+                if (isfull[slidedown]) {
+                    isfull[index] = true;
+                }
             }
         }
         int lastcol = col - 1;
         if (lastcol >= 0) {
             int slideleft = row * size + lastcol;
-            if (states[slideleft]) {
+            if (isopen[slideleft]) {
                 sites.union(slideleft, index);
+                if (isfull[slideleft]) {
+                    isfull[index] = true;
+                }
             }
         }
         int nextcol = col + 1;
         if (nextcol < size) {
             int slideright = row * size + nextcol;
-            if (states[slideright]) {
+            if (isopen[slideright]) {
                 sites.union(slideright, index);
+                if (isfull[slideright]) {
+                    isfull[index] = true;
+                }
             }
         }
     }
@@ -72,7 +89,7 @@ public class Percolation {
             throw new java.lang.IndexOutOfBoundsException();
         }
         int index = row * size + col;
-        return states[index];
+        return isopen[index];
     }  // is the site (row, col) open?
 
 
@@ -81,15 +98,16 @@ public class Percolation {
             throw new java.lang.IndexOutOfBoundsException();
         }
         int index = row * size + col;
-        if (!states[index]) {
-            return false;
-        }
-        for (int i = 0; i < size; i++) {
-            if (states[i] && sites.connected(i, index)) {
-                return true;
+        if (isfull[index]) {
+            return true;
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (isopen[i] && sites.connected(i, index)) {
+                    isfull[index] = true;
+                }
             }
         }
-        return false;
+        return isfull[index];
     } // is the site (row, col) full?
 
 
@@ -99,9 +117,9 @@ public class Percolation {
 
 
     public boolean percolates() {
-        int endIndex = size - 1;
+        int endRow = size - 1;
         for (int i = 0; i < size; i++) {
-            if (isFull(endIndex, i)) {
+            if (isFull(endRow, i)) {
                 return true;
             }
         }
@@ -138,3 +156,4 @@ public class Percolation {
         assertTrue(mySys.percolates());
     }  // use for unit testing (not required)
 }
+
