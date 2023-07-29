@@ -9,6 +9,7 @@ public class Percolation {
     private int openNums;
     private WeightedQuickUnionUF sites;
     private boolean[][] isopen;
+    private boolean[][] isfull;
 
     private int[] openBottomSitesNumber;
     private int openBottomNums;
@@ -24,15 +25,16 @@ public class Percolation {
             throw new IllegalArgumentException();
         }
         this.size = N;
-        this.totalsites = N *N;
+        this.totalsites = N * N;
         this.sites = new WeightedQuickUnionUF(totalsites + 1);
         this.isopen = new boolean[N][N];
+        this.isfull = new boolean[N][N];
         this.openBottomSitesNumber = new int[N];
         this.openBottomNums = 0;
         this.openNums = 0;
         this.isPercolation = false;
 
-        for(int i = 0; i < N; i++) {
+        for (int i = 0; i < N; i++) {
             sites.union(i, N * N);
         }
     }                // create N-by-N grid, with all sites initially blocked
@@ -97,7 +99,10 @@ public class Percolation {
         if (col < 0 || col >= size || row < 0 || row >= size) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        return sites.connected(xyTo1D(row, col), totalsites) && isOpen(row, col);
+        if (!isfull[row][col]) {
+            isfull[row][col] = sites.connected(xyTo1D(row, col), totalsites) && isOpen(row, col);
+        }
+        return isfull[row][col];
     } // is the site (row, col) full?
 
 
