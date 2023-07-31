@@ -117,24 +117,19 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      * Bubbles down the node currently at the given index.
      */
     private void sink(int index) {
+        if (!inBounds(index)) {
+            return;
+        }
+
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
 
         while (true) {
-            int leftChildIndex = leftIndex(index);
-            if (leftChildIndex > size) {
-                break;
-            }
-            int rightChildIndex = rightIndex(index);
-            boolean cmpWithLeft = (min(leftChildIndex, index) == leftChildIndex);
-            boolean cmpWithRight = (min(rightChildIndex, index) == rightChildIndex);
-            boolean LeftLowerThanRight = (min(leftChildIndex,rightChildIndex) == leftChildIndex);
-            if (cmpWithLeft && LeftLowerThanRight) {
-                swap(leftChildIndex, index);
-                index = leftChildIndex;
-            } else if (cmpWithRight){
-                swap(rightChildIndex, index);
-                index = rightChildIndex;
+            int minChild = min(leftIndex(index),rightIndex(index));
+            boolean cmp = (min(minChild, index) == minChild);
+            if (cmp) {
+                swap(minChild, index);
+                index = minChild;
             } else {
                 break;
             }
@@ -165,7 +160,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public T peek() {
-        return contents[1].item();
+        return getNode(1).item();
     }
 
     /**
