@@ -1,5 +1,6 @@
 package lab9;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -53,19 +54,39 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("call get() with null key");
+        }
+        int keyhash = hash(key);
+        ArrayMap<K, V> targetBucket = buckets[keyhash];
+        if (targetBucket.containsKey(key)) {
+            return targetBucket.get(key);
+        }
+        return null;
     }
 
     /* Associates the specified value with the specified key in this map. */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("call put() with null key");
+        }
+        if (value == null) {
+            remove(key);
+            return;
+        }
+        int keyhash = hash(key);
+        ArrayMap<K, V> targetBucket = buckets[keyhash];
+        if (!targetBucket.containsKey(key)) {
+            size++;
+        }
+        targetBucket.put(key, value);
     }
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return size;
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
@@ -73,7 +94,13 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        Set<K> keyset = new HashSet<>();
+        for (ArrayMap<K, V> b : buckets) {
+            for (K key : b) {
+                keyset.add(key);
+            }
+        }
+        return keyset;
     }
 
     /* Removes the mapping for the specified key from this map if exists.
@@ -81,7 +108,13 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * UnsupportedOperationException. */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("call remove() with null key");
+        }
+        int keyhash = hash(key);
+        ArrayMap<K, V> targetBucket = buckets[keyhash];
+        size--;
+        return targetBucket.remove(key);
     }
 
     /* Removes the entry for the specified key only if it is currently mapped to
@@ -89,11 +122,54 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * throw an UnsupportedOperationException.*/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("call remove() with null key");
+        }
+        int keyhash = hash(key);
+        ArrayMap<K, V> targetBucket = buckets[keyhash];
+        V removeValue = targetBucket.get(key);
+        if (removeValue == value) {
+            size--;
+            return targetBucket.remove(key);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return new KeyIterator();
     }
+
+    private class KeyIterator implements Iterator<K> {
+        private int leftKeys;
+        private Iterator<K> currentIterator;
+        private int currentIndex;
+
+        public KeyIterator() {
+            this.leftKeys = size;
+            this.currentIndex = 0;
+            this.currentIterator = buckets[currentIndex].iterator();
+        }
+
+        public boolean hasNext() {
+            return leftKeys != 0;
+        }
+
+        public K next() {
+            if (this.leftKeys == 0) {
+                throw new IllegalCallerException("no next elements");
+            }
+            if (currentIterator.hasNext()) {
+                this.leftKeys--;
+                return currentIterator.next();
+            } else {
+                currentIndex++;
+                currentIterator = buckets[currentIndex].iterator();
+                return this.next();
+            }
+        }
+
+    }
+
 }

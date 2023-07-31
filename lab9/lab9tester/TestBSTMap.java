@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import lab9.BSTMap;
 
+import java.util.Iterator;
+import java.util.Set;
+
 /**
  * Tests by Brendan Hu, Spring 2015, revised for 2018 by Josh Hug
  */
@@ -88,5 +91,40 @@ public class TestBSTMap {
 
     public static void main(String[] args) {
         jh61b.junit.TestRunner.runTests(TestBSTMap.class);
+    }
+
+    @Test
+    public void testKeysetAndIterator() {
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        for (int i = 0; i < 455; i++) {
+            b.put("hi" + i, 1 + i);
+        }
+        Iterator<String> iter = b.iterator();
+        Set<String> keyset = b.keySet();
+        while (iter.hasNext()) {
+            keyset.contains(iter.next());
+        }
+    }
+
+    @Test
+    public void testremove() {
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        b.put("hi5",1);
+        b.put("hi3",2);
+        b.put("hi7",3);
+        b.put("hi4",4);
+        b.put("hi6",5);
+        b.put("hi2",6);
+        b.put("hi8",7);
+        b.put("hi1",8);
+        b.put("hi9",9);
+
+        b.remove("hi8");
+        b.remove("hi7");
+        b.remove("hi4");
+        b.put("hi4",400);
+        b.remove("hi1");
+        b.remove("hi4",4);
+        b.remove("hi5");
     }
 }
