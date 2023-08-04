@@ -72,9 +72,7 @@ public class Board implements WorldState {
         int num = 0;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (tileAt(i, j) == 0 && goal != size * size) {
-                    num++;
-                } else if (tileAt(i, j) != goal) {
+               if (tileAt(i, j) != goal && tileAt(i, j) != 0) {
                     num++;
                 }
                 goal++;
@@ -128,7 +126,7 @@ public class Board implements WorldState {
         return true;
     }
 
-    public int hasCode() {
+    private int hasCode() {
         return super.hashCode();
     }
 

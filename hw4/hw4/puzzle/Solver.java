@@ -2,11 +2,12 @@ package hw4.puzzle;
 
 import edu.princeton.cs.algs4.MinPQ;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 
 public class Solver {
-    private MinPQ addToPath;
+    private MinPQ<Node> addToPath;
     private int moves;
     private Deque<WorldState> seq;
 
@@ -33,11 +34,11 @@ public class Solver {
 
 
     public Solver(WorldState initial) {
-        addToPath = new MinPQ();
+        addToPath = new MinPQ<>();
         addToPath.insert(new Node(initial, 0, null));
 
         while (!addToPath.isEmpty()) {
-            Node v = (Node) addToPath.delMin();
+            Node v = addToPath.delMin();
             if (v.distToGoal == 0) {
                 seq = new ArrayDeque<>();
                 this.moves = v.moves;
