@@ -2,17 +2,15 @@ package hw4.puzzle;
 
 import edu.princeton.cs.algs4.MinPQ;
 
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Stack;
+import java.util.*;
 
 
 public class Solver {
     private MinPQ addToPath;
     private int moves;
-    private Stack<WorldState> Seq;
+    private Deque<WorldState> seq;
 
-    private class Node implements Comparable<Node>{
+    private class Node implements Comparable<Node> {
         private WorldState word;
         private int moves;
         private int distToGoal;
@@ -41,16 +39,16 @@ public class Solver {
         while (!addToPath.isEmpty()) {
             Node v = (Node) addToPath.delMin();
             if (v.distToGoal == 0) {
-                Seq = new Stack<>();
+                seq = new ArrayDeque<>();
                 this.moves = v.moves;
                 while (v != null) {
-                    Seq.add(v.word);
+                    seq.push(v.word);
                     v = v.parent;
                 }
                 return;
             }
             for (WorldState w : v.word.neighbors()) {
-                if (v.parent == null || !v.parent.word.equals(w)  ) {
+                if (v.parent == null || !v.parent.word.equals(w)) {
                     addToPath.insert(new Node(w, v.moves + 1, v));
                 }
             }
@@ -61,6 +59,6 @@ public class Solver {
     }
 
     public Iterable<WorldState> solution() {
-        return Seq;
+        return seq;
     }
 }

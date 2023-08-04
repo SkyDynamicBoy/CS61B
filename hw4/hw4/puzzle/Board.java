@@ -2,9 +2,9 @@ package hw4.puzzle;
 
 import edu.princeton.cs.algs4.Queue;
 
-public class Board implements WorldState{
-    private int size;
-    private int[][] tiles;
+public class Board implements WorldState {
+    private final int size;
+    private final int[][] tiles;
     private static final int BLANK = 0;
 
     public Board(int[][] tiles) {
@@ -30,8 +30,7 @@ public class Board implements WorldState{
 
 
     /**
-     * @source http://joshh.ug/neighbors.html
-     * @Return neighbors of this board.
+     * source http://joshh.ug/neighbors.html
      */
     @Override
     public Iterable<WorldState> neighbors() {
@@ -73,7 +72,10 @@ public class Board implements WorldState{
         int num = 0;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (tileAt(i, j) != goal) {
+                if (tileAt(i, j) == 0 && goal != size * size) {
+                    num++;
+                } else if (tileAt(i, j) != goal) {
+                    num++;
                 }
                 goal++;
             }
@@ -101,6 +103,7 @@ public class Board implements WorldState{
         return manhattan();
     }
 
+    @Override
     public boolean equals(Object y) {
         if (y == null) {
             return false;
@@ -112,6 +115,9 @@ public class Board implements WorldState{
             return false;
         }
         Board o = (Board) y;
+        if (this.size != o.size) {
+            return false;
+        }
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (this.tileAt(i, j) != o.tileAt(i, j)) {
@@ -122,6 +128,10 @@ public class Board implements WorldState{
         return true;
     }
 
+    public int hasCode() {
+        return super.hashCode();
+    }
+
     /** Returns the string representation of the board. 
       * Uncomment this method. */
     public String toString() {
@@ -130,7 +140,7 @@ public class Board implements WorldState{
         s.append(N + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                s.append(String.format("%2d ", tileAt(i,j)));
+                s.append(String.format("%2d ", tileAt(i, j)));
             }
             s.append("\n");
         }
