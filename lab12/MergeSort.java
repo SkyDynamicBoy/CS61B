@@ -82,11 +82,14 @@ public class MergeSort {
             return items;
         }
         Queue<Queue<Item>> splited = makeSingleItemQueues(items);
-        items = splited.dequeue();
+        Queue<Item> q1 = splited.dequeue();
         while (!splited.isEmpty()) {
             Queue<Item> q2 = splited.dequeue();
-            splited.enqueue(mergeSortedQueues(items, q2));
-            items = splited.dequeue();
+            splited.enqueue(mergeSortedQueues(q1, q2));
+            q1 = splited.dequeue();
+        }
+        for (Item i : q1) {
+            items.enqueue(i);
         }
         return items;
     }
