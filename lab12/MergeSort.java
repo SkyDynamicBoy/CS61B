@@ -1,4 +1,8 @@
 import edu.princeton.cs.algs4.Queue;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+import java.util.*;
 
 public class MergeSort {
     /**
@@ -35,7 +39,13 @@ public class MergeSort {
     private static <Item extends Comparable> Queue<Queue<Item>>
             makeSingleItemQueues(Queue<Item> items) {
         // Your code here!
-        return null;
+        Queue<Queue<Item>> splited = new Queue<>();
+        while (!items.isEmpty()) {
+            Queue<Item> queue = new Queue<>();
+            queue.enqueue(items.dequeue());
+            splited.enqueue(queue);
+        }
+        return splited;
     }
 
     /**
@@ -54,13 +64,48 @@ public class MergeSort {
     private static <Item extends Comparable> Queue<Item> mergeSortedQueues(
             Queue<Item> q1, Queue<Item> q2) {
         // Your code here!
-        return null;
+        Queue<Item> merged = new Queue<>();
+        while (!q1.isEmpty()) {
+            merged.enqueue(getMin(q1, q2));
+        }
+        while (!q2.isEmpty()) {
+            merged.enqueue(getMin(q1, q2));
+        }
+        return merged;
     }
 
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
         // Your code here!
+        if (items.isEmpty()) {
+            return null;
+        }
+        Queue<Queue<Item>> splited = makeSingleItemQueues(items);
+        items = splited.dequeue();
+        while (!splited.isEmpty()) {
+            Queue<Item> q2 = splited.dequeue();
+            splited.enqueue(mergeSortedQueues(items, q2));
+            items = splited.dequeue();
+        }
         return items;
+    }
+
+    @Test
+    public static void main(String[] args) {
+        Queue<Integer> students = new Queue<>();
+        students.enqueue(2);
+        students.enqueue(6);
+        students.enqueue(1);
+        students.enqueue(0);
+        students.enqueue(-1);
+        students.enqueue(7);
+        students = mergeSort(students);
+        assertTrue(-1 == students.dequeue());
+        assertTrue(0 == students.dequeue());
+        assertTrue(1 == students.dequeue());
+        assertTrue(2 == students.dequeue());
+        assertTrue(6 == students.dequeue());
+        assertTrue(7 == students.dequeue());
     }
 }

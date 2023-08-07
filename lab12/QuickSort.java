@@ -1,4 +1,7 @@
 import edu.princeton.cs.algs4.Queue;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class QuickSort {
     /**
@@ -48,12 +51,50 @@ public class QuickSort {
             Queue<Item> unsorted, Item pivot,
             Queue<Item> less, Queue<Item> equal, Queue<Item> greater) {
         // Your code here!
+        for (Item i : unsorted) {
+            int cmp = i.compareTo(pivot);
+            if (cmp < 0) {
+                less.enqueue(i);
+            } else if (cmp > 0) {
+                greater.enqueue(i);
+            } else {
+                equal.enqueue(i);
+            }
+        }
     }
 
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> quickSort(
             Queue<Item> items) {
         // Your code here!
+        if (items.isEmpty()) {
+            return items;
+        }
+        Queue<Item> less= new Queue<>();
+        Queue<Item> equal = new Queue<>();
+        Queue<Item> greater = new Queue<>();
+        partition(items, getRandomItem(items), less, equal, greater);
+        less = quickSort(less);
+        greater = quickSort(greater);
+        items = catenate(catenate(less, equal), greater);
         return items;
+    }
+
+    @Test
+    public static void main(String[] args) {
+        Queue<Integer> students = new Queue<>();
+        students.enqueue(2);
+        students.enqueue(6);
+        students.enqueue(1);
+        students.enqueue(0);
+        students.enqueue(-1);
+        students.enqueue(7);
+        students = quickSort(students);
+        assertTrue(-1 == students.dequeue());
+        assertTrue(0 == students.dequeue());
+        assertTrue(1 == students.dequeue());
+        assertTrue(2 == students.dequeue());
+        assertTrue(6 == students.dequeue());
+        assertTrue(7 == students.dequeue());
     }
 }
