@@ -1,3 +1,7 @@
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
 /**
  * Class for doing Radix sort
  *
@@ -17,7 +21,52 @@ public class RadixSort {
      */
     public static String[] sort(String[] asciis) {
         // TODO: Implement LSD Sort
-        return null;
+        if (asciis.length == 0 || asciis.length == 1) {
+            return asciis;
+        }
+
+        int maxLength = 0;
+        for (String s : asciis) {
+            int strLength = s.length();
+            maxLength = maxLength > strLength ? maxLength : strLength;
+        }
+
+        String[] sorted = asciis;
+        for (int p = maxLength - 1; p >= 0; p--) {
+
+            int[] counts = new int[256];
+            for (String s : asciis) {
+                if (p >= s.length()) {
+                    counts[0]++;
+                } else {
+                    int ascii = s.charAt(p);
+                    counts[ascii]++;
+                }
+            }
+
+            int[] starts = new int[256];
+            int start = 0;
+            for (int i = 0; i < 255; i++) {
+                starts[i] = start;
+                start += counts[i];
+            }
+
+            sorted = new String[asciis.length];
+            for (String s : asciis) {
+                if (p >= s.length()) {
+                    sorted[starts[0]] = s;
+                    starts[0]++;
+                } else {
+                    int ascii = s.charAt(p);
+                    sorted[starts[ascii]] = s;
+                    starts[ascii]++;
+                }
+            }
+
+            asciis = sorted;
+        }
+
+        return sorted;
     }
 
     /**
@@ -44,5 +93,47 @@ public class RadixSort {
     private static void sortHelperMSD(String[] asciis, int start, int end, int index) {
         // Optional MSD helper method for optional MSD radix sort
         return;
+    }
+
+    @Test
+    public void test1() {
+        String[] unsorted = new String[11];
+        unsorted[0] = "b";
+        unsorted[1] = "x";
+        unsorted[2] = "a";
+        unsorted[3] = "c";
+        unsorted[4] = "g";
+        unsorted[5] = "h";
+        unsorted[6] = "m";
+        unsorted[7] = "b";
+        unsorted[8] = "q";
+        unsorted[9] = "b";
+        unsorted[10] = "c";
+        String[] expected = {"a","b","b","b","c","c","g","h","m","q","x"};
+
+        String[] sorted = sort(unsorted);
+
+        assertArrayEquals(expected, sorted);
+    }
+
+    @Test
+    public void test2() {
+        String[] unsorted = new String[11];
+        unsorted[0] = "one";
+        unsorted[1] = "two";
+        unsorted[2] = "three";
+        unsorted[3] = "four";
+        unsorted[4] = "five";
+        unsorted[5] = "six";
+        unsorted[6] = "seven";
+        unsorted[7] = "eight";
+        unsorted[8] = "nine";
+        unsorted[9] = "ten";
+        unsorted[10] = "eleven";
+        String[] expected = {"eight","eleven","five","four","nine","one","seven","six","ten","three","two"};
+
+        String[] sorted = sort(unsorted);
+
+        assertArrayEquals(expected, sorted);
     }
 }
