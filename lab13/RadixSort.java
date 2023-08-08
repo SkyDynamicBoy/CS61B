@@ -21,32 +21,33 @@ public class RadixSort {
      */
     public static String[] sort(String[] asciis) {
 
-        if (asciis.length == 0 || asciis.length == 1) {
-            return asciis;
-        }
-
+        int maxLength = 0;
         int arrLength = 0;
         for (String s : asciis) {
             if (s != null) {
                 arrLength++;
+                maxLength = maxLength > s.length() ? maxLength : s.length();
             }
         }
 
-        int maxLength = 0;
-        for (int i = 0; i < arrLength; i++) {
-            int strLength = asciis[i].length();
-            maxLength = maxLength > strLength ? maxLength : strLength;
+        String[] arrayWithoutNull = new String[arrLength];
+        int index = 0;
+        for (String s : asciis) {
+            if (s != null) {
+                arrayWithoutNull[index] = s;
+                index++;
+            }
         }
 
-        String[] sorted = asciis;
-        for (int p = maxLength - 1; p >= 0; p--) {
 
+        String[] sorted = arrayWithoutNull;
+        for (int p = maxLength - 1; p >= 0; p--) {
             int[] counts = new int[256];
-            for (int i = 0; i < arrLength; i++) {
-                if (p >= asciis[i].length()) {
+            for (String s : arrayWithoutNull) {
+                if (p >= s.length()) {
                     counts[0]++;
                 } else {
-                    int ascii = asciis[i].charAt(p);
+                    int ascii = s.charAt(p);
                     counts[ascii]++;
                 }
             }
@@ -58,22 +59,31 @@ public class RadixSort {
                 start += counts[i];
             }
 
-            sorted = new String[asciis.length];
-            for (int i = 0; i < arrLength; i++) {
-                if (p >= asciis[i].length()) {
-                    sorted[starts[0]] = asciis[i];
+            sorted = new String[arrLength];
+            for (String s : arrayWithoutNull) {
+                if (p >= s.length()) {
+                    sorted[starts[0]] = s;
                     starts[0]++;
                 } else {
-                    int ascii = asciis[i].charAt(p);
-                    sorted[starts[ascii]] = asciis[i];
+                    int ascii = s.charAt(p);
+                    sorted[starts[ascii]] = s;
                     starts[ascii]++;
                 }
             }
 
-            asciis = sorted;
+            arrayWithoutNull = sorted;
         }
 
-        return sorted;
+        String[] returnArray = new String[asciis.length];
+        for (int i = 0, j = 0; i < asciis.length; i++) {
+            if (asciis[i] == null) {
+                returnArray[i] = null;
+            } else {
+                returnArray[i] = sorted[j];
+                j++;
+            }
+        }
+        return returnArray;
     }
 
     /**
