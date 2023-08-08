@@ -20,14 +20,21 @@ public class RadixSort {
      * @return String[] the sorted array
      */
     public static String[] sort(String[] asciis) {
-        // TODO: Implement LSD Sort
+
         if (asciis.length == 0 || asciis.length == 1) {
             return asciis;
         }
 
-        int maxLength = 0;
+        int arrLength = 0;
         for (String s : asciis) {
-            int strLength = s.length();
+            if (s != null) {
+                arrLength++;
+            }
+        }
+
+        int maxLength = 0;
+        for (int i = 0; i < arrLength; i++) {
+            int strLength = asciis[i].length();
             maxLength = maxLength > strLength ? maxLength : strLength;
         }
 
@@ -35,11 +42,11 @@ public class RadixSort {
         for (int p = maxLength - 1; p >= 0; p--) {
 
             int[] counts = new int[256];
-            for (String s : asciis) {
-                if (p >= s.length()) {
+            for (int i = 0; i < arrLength; i++) {
+                if (p >= asciis[i].length()) {
                     counts[0]++;
                 } else {
-                    int ascii = s.charAt(p);
+                    int ascii = asciis[i].charAt(p);
                     counts[ascii]++;
                 }
             }
@@ -52,13 +59,13 @@ public class RadixSort {
             }
 
             sorted = new String[asciis.length];
-            for (String s : asciis) {
-                if (p >= s.length()) {
-                    sorted[starts[0]] = s;
+            for (int i = 0; i < arrLength; i++) {
+                if (p >= asciis[i].length()) {
+                    sorted[starts[0]] = asciis[i];
                     starts[0]++;
                 } else {
-                    int ascii = s.charAt(p);
-                    sorted[starts[ascii]] = s;
+                    int ascii = asciis[i].charAt(p);
+                    sorted[starts[ascii]] = asciis[i];
                     starts[ascii]++;
                 }
             }
@@ -131,6 +138,29 @@ public class RadixSort {
         unsorted[9] = "ten";
         unsorted[10] = "eleven";
         String[] expected = {"eight","eleven","five","four","nine","one","seven","six","ten","three","two"};
+
+        String[] sorted = sort(unsorted);
+
+        assertArrayEquals(expected, sorted);
+    }
+
+    @Test
+    public void test3() {
+        String[] unsorted = new String[12];
+        unsorted[0] = "one";
+        unsorted[1] = "two";
+        unsorted[2] = "three";
+        unsorted[3] = "four";
+        unsorted[4] = "five";
+        unsorted[5] = "six";
+        unsorted[6] = "seven";
+        unsorted[7] = "eight";
+        unsorted[8] = "nine";
+        unsorted[9] = "ten";
+        unsorted[10] = "eleven";
+
+        assertEquals(12, unsorted.length);;
+        String[] expected = {"eight","eleven","five","four","nine","one","seven","six","ten","three","two", null};
 
         String[] sorted = sort(unsorted);
 
